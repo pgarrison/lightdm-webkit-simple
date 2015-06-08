@@ -38,12 +38,11 @@ var login = (function (lightdm, $) {
 
         $pass.trigger('focus');
     };
-    var blink = function() {
-        show_prompt('blink');
-        $('body').css('backgroundColor', 'red');
+    var blink = function(color, time) {
+        $('body').css('backgroundColor', color);
         setTimeout(function() {
-            $('body').css('backgroundColor', 'white');
-        }, 200);
+            $('body').css('backgroundColor', '#2C3E50');
+        }, time);
     }
 
     // Functions that lightdm needs
@@ -57,7 +56,7 @@ var login = (function (lightdm, $) {
         if(password !== null) {
             lightdm.provide_secret(password);
         }
-    };
+    }; 
     window.authentication_complete = function () {
         if (lightdm.is_authenticated) {
             show_prompt('Logged in as ' + lightdm.authentication_user + 
@@ -66,6 +65,9 @@ var login = (function (lightdm, $) {
                 lightdm.authentication_user,
                 lightdm.default_session
             );
+        } else {
+            blink('red', 500);
+            select_user_from_list();
         }
     };
     // These can be used for user feedback
@@ -94,7 +96,13 @@ var login = (function (lightdm, $) {
                 window.provide_secret();
             });
 
-            $pass.keydown(blink);
+            $pass.keydown(function(e) {
+                var isBackspace = e.keyCode === 8 || e.keyCode === 46;
+                var passEmpty = $pass.val().length === 0;
+                if(!(isBackspace && passEmpty)) {
+                    blink('#ECF0F1', 250);
+                }
+            });
             $pass.focus()
             $pass.focusout(function() {
                 $pass.focus();
