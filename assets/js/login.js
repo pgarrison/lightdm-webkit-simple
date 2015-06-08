@@ -1,8 +1,17 @@
 var login = (function (lightdm, $) {
+    // Settings
+    var background = '#2C3E50';
+    var keypressColor = '#ECF0F1';
+    var wrongPassColor = '#7C4A37';
+    var verifyingColor = '#2D2D57';
+    var verifiedColor = '#255541';
+
+    // Local vars
     var selected_user = null;
     var password = null
     var $user = $('#user');
     var $pass = $('#pass');
+    var backgroundLocked = false;
 
     // private functions
     var setup_users_list = function () {
@@ -41,7 +50,9 @@ var login = (function (lightdm, $) {
     var blink = function(color, time) {
         $('body').css('backgroundColor', color);
         setTimeout(function() {
-            $('body').css('backgroundColor', '#2C3E50');
+            if(!backgroundLocked) {
+                $('body').css('backgroundColor', background);
+            }
         }, time);
     }
 
@@ -55,10 +66,15 @@ var login = (function (lightdm, $) {
 
         if(password !== null) {
             lightdm.provide_secret(password);
+            $('body').css('backgroundColor', verifyingColor);
+            backgroundLocked = true;
         }
     }; 
     window.authentication_complete = function () {
+        $pass.val('');
+        backgroundLocked = false;
         if (lightdm.is_authenticated) {
+            blink(verifiedColor, 5000);
             show_prompt('Logged in as ' + lightdm.authentication_user + 
                         ' to ' + lightdm.default_session);
             lightdm.login(
@@ -66,7 +82,7 @@ var login = (function (lightdm, $) {
                 lightdm.default_session
             );
         } else {
-            blink('red', 500);
+            blink(wrongPassColor, 500);
             select_user_from_list();
         }
     };
@@ -100,7 +116,7 @@ var login = (function (lightdm, $) {
                 var isBackspace = e.keyCode === 8 || e.keyCode === 46;
                 var passEmpty = $pass.val().length === 0;
                 if(!(isBackspace && passEmpty)) {
-                    blink('#ECF0F1', 250);
+                    blink(keypressColor, 250);
                 }
             });
             $pass.focus()
