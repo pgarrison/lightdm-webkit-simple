@@ -1,4 +1,4 @@
-## A Minimalist LightDM Webkit greeter theme, based on lightdm-webkit-google
+## A minimalist LightDM Webkit greeter theme, based on lightdm-webkit-google
 
 This is a theme for LightDM Webkit (`lightdm-webkit-greeter`).
 
@@ -8,7 +8,7 @@ It borrows the shutdown/restart/clock at the bottom (and most of the code) from 
 
 ### Features
 
-I created this for use on Arch Linux on my HP Chromebook 11, so it only has the basic features of:
+~~I created this for use on Arch Linux on my HP Chromebook 11,~~ so it only has the basic features of:
 
 - Selecting an available user from a dropdown (if there's more than one)
 - Entering their password
