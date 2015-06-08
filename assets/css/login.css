@@ -16,7 +16,6 @@ body {
     font-family: Arimo Regular, Arial, sans-serif;
     font-size: 13px;
     background: #fff;
-    background-image: url(../ui/wallpaper.jpg);
     background-position: 50%;
     background-size: cover;
     background-attachment: fixed;
@@ -40,28 +39,6 @@ body {
 .signin-card {
     width: 274px;
     max-width: 90%;
-}
-.profile-img {
-    width: 96px;
-    height: 96px;
-    margin: 0 auto 40px;
-    display: block;
-    border-radius: 100%;
-    background-image: url(../ui/avatar_2x.png);
-    background-size: cover;
-    background-position: 50%;
-    background-color: transparent;
-    border: 1px solid #c0c0c0;
-    outline: none;
-}
-.card label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 1em;
-}
-.card label span {
-    display: block;
-    margin-bottom: 1em;
 }
 .card input[type=text],
 .card input[type=password],

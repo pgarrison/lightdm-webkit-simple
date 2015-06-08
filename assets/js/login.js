@@ -6,24 +6,26 @@ var login = (function (lightdm, $) {
 
     // private functions
     var setup_users_list = function () {
-        var $list = $user;
-        var to_append = null;
-        $.each(lightdm.users, function (i) {
-            var username = lightdm.users[i].name;
-            var dispname = lightdm.users[i].display_name;
-            $list.append(
-                '<option value="' +
-                username +
-                '">' +
-                dispname +
-                '</option>'
-            );
-        });
+        if(lightdm.num_users === 1) {
+            $('#tohide').css('opacity', 0);
+        } else {
+            var $list = $user;
+            var to_append = null;
+            $.each(lightdm.users, function (i) {
+                var username = lightdm.users[i].name;
+                var dispname = lightdm.users[i].display_name;
+                $list.append(
+                    '<option value="' +
+                    username +
+                    '">' +
+                    dispname +
+                    '</option>'
+                );
+            });
+        }
     };
     var select_user_from_list = function (idx) {
         var idx = idx || 0;
-
-        find_and_display_user_picture(idx);
 
         if(lightdm._username){
             lightdm.cancel_authentication();
@@ -36,12 +38,13 @@ var login = (function (lightdm, $) {
 
         $pass.trigger('focus');
     };
-    var find_and_display_user_picture = function (idx) {
-        $('.profile-img').attr(
-            'src',
-            lightdm.users[idx].image
-        );
-    };
+    var blink = function() {
+        show_prompt('blink');
+        $('body').css('backgroundColor', 'red');
+        setTimeout(function() {
+            $('body').css('backgroundColor', 'white');
+        }, 200);
+    }
 
     // Functions that lightdm needs
     window.start_authentication = function (username) {
@@ -57,7 +60,8 @@ var login = (function (lightdm, $) {
     };
     window.authentication_complete = function () {
         if (lightdm.is_authenticated) {
-            show_prompt('Logged in');
+            show_prompt('Logged in as ' + lightdm.authentication_user + 
+                        ' to ' + lightdm.default_session);
             lightdm.login(
                 lightdm.authentication_user,
                 lightdm.default_session
@@ -88,6 +92,12 @@ var login = (function (lightdm, $) {
             $('form').on('submit', function (e) {
                 e.preventDefault();
                 window.provide_secret();
+            });
+
+            $pass.keydown(blink);
+            $pass.focus()
+            $pass.focusout(function() {
+                $pass.focus();
             });
         });
     };
